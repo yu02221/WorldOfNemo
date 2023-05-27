@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a558daea17b54b4a8c11112e4a6a869, type: 3}
+  m_Name: IronBlock
+  m_EditorClassIdentifier: 
+  itemType: 0
+  blockType: 14
+  materType: 0
+  itemName: IronBlock
+  itemImage: {fileID: 21300000, guid: e00e0066c66e16243858197759c9bed5, type: 3}
+  maxStorageCount: 64
+  burningTime: 0
+  hardness: 5
+  miningSpeed: 0
+  loggingSpeed: 0
+  diggingSpeed: 0
+  power: 0

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a558daea17b54b4a8c11112e4a6a869, type: 3}
+  m_Name: CoalBlock
+  m_EditorClassIdentifier: 
+  itemType: 0
+  blockType: 17
+  materType: 0
+  itemName: CoalBlock
+  itemImage: {fileID: 21300000, guid: b15dd6d130b603c45a64178d3dfce657, type: 3}
+  maxStorageCount: 64
+  burningTime: 800
+  hardness: 5
+  miningSpeed: 0
+  loggingSpeed: 0
+  diggingSpeed: 0
+  power: 0
+  foodPoint: 0
+  hitSound: {fileID: 8300000, guid: af2206fc68ef74d40bebd3974188b5b0, type: 3}
+  breakSound: {fileID: 8300000, guid: f32fa1a26ae9d2b40a46a76f55b65cd2, type: 3}
+  placeSound: {fileID: 8300000, guid: e7d277c7c1415b841ae9ad07ed2baf3a, type: 3}
+  stepSound: {fileID: 8300000, guid: 372de400302d11c4d92bfb6f93c98f54, type: 3}
