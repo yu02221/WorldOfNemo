@@ -45,8 +45,6 @@ public class PlayerStatus : MonoBehaviour
 
     public int weaponPower;
 
-    public bool invenAvail = true;
-
     public Vector3 spawnPoint;
 
     public AudioSource expGetSound;
@@ -65,9 +63,9 @@ public class PlayerStatus : MonoBehaviour
         chunkPosTxt.text = string.Format($"ChunkX : {standChunkX}\nChunkZ : {standChunkZ}");
 
         if (pm.playerState == PlayerState.Run || pm.playerState == PlayerState.Jump)
-            hungerTime += 0.2f * Time.deltaTime;
+            hungerTime += 0.1f * Time.deltaTime;
         else
-            hungerTime += 0.05f * Time.deltaTime;
+            hungerTime += 0.01f * Time.deltaTime;
 
         if (hungerTime >= 1f)
         {
@@ -90,9 +88,6 @@ public class PlayerStatus : MonoBehaviour
                 SetHp();
             }
         }
-
-        if (hunger > 6 && pm.runSpeed == pm.walkSpeed)
-            pm.runSpeed = 2 * pm.walkSpeed;
 
         if (hunger == maxHunger && hp < maxHp)
         {

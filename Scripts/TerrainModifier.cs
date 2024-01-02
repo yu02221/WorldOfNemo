@@ -26,10 +26,10 @@ public class TerrainModifier : MonoBehaviour
     int curBlockX = TerrainChunk.chunkWidth;
     int curBlockY = TerrainChunk.chunkHeight;
     int curBlockZ = TerrainChunk.chunkWidth;
-    // 타겟 블럭 좌표
-    int tBlockX;
-    int tBlockY;
-    int tBlockZ;
+
+    int bix;
+    int biy;
+    int biz;
 
     TerrainChunk tc;
 
@@ -103,7 +103,7 @@ public class TerrainModifier : MonoBehaviour
             if (rightClick)
             {
                 // 제작대 우클릭시
-                if (GetTargetBlock(1) && tc.blocks[tBlockX, tBlockY, tBlockZ] == BlockType.CraftingTable)
+                if (GetTargetBlock(1) && tc.blocks[bix, biy, biz] == BlockType.CraftingTable)
                 {
                     craftringTableWindow.SetActive(true);
                     inventoryWindow.SetActive(true);
@@ -111,7 +111,7 @@ public class TerrainModifier : MonoBehaviour
                     Cursor.visible = true;
                 }
                 // 화로 우클릭시
-                else if (GetTargetBlock(1) && tc.blocks[tBlockX, tBlockY, tBlockZ] == BlockType.Furnace)
+                else if (GetTargetBlock(1) && tc.blocks[bix, biy, biz] == BlockType.Furnace)
                 {
                     furnaceWindow.SetActive(true);
                     inventoryWindow.SetActive(true);
@@ -200,6 +200,7 @@ public class TerrainModifier : MonoBehaviour
             diggingSpeed = curItem.diggingSpeed;
         }
         if (hotInven_w.slots[curSlot].item == null ||
+            hotInven_w.slots[curSlot].item.itemType == Item.ItemType.Food ||
             hotInven_w.slots[curSlot].item.itemType == Item.ItemType.Ingredient ||
             hotInven_w.slots[curSlot].item.itemType == Item.ItemType.Other)
         {
@@ -225,13 +226,13 @@ public class TerrainModifier : MonoBehaviour
     // 블록 채굴
     private void MiningBlock()
     {   
-        if (tBlockX != curBlockX || tBlockY != curBlockY || tBlockZ != curBlockZ)
+        if (bix != curBlockX || biy != curBlockY || biz != curBlockZ)
         {   // 에임이 다른 블럭으로 향하면 블록 내구도 초기화
             curDurability = durability;
             breakingBlock.SetActive(false);
-            curBlockX = tBlockX;
-            curBlockY = tBlockY;
-            curBlockZ = tBlockZ;
+            curBlockX = bix;
+            curBlockY = biy;
+            curBlockZ = biz;
         }
         else
         {   // 마우스로 클릭하는 동안 내구도 감소
@@ -255,8 +256,8 @@ public class TerrainModifier : MonoBehaviour
             int index = Mathf.FloorToInt((1 - curDurability / durability) * 6f);
             if (index < 6 && index >= 0)
             {
-                if (tc.blocks[tBlockX, tBlockY, tBlockZ] != BlockType.Air)
-                    hitBlockSound.clip = itemSet.iSet[tc.blocks[tBlockX, tBlockY, tBlockZ].ToString()].hitSound;
+                if (tc.blocks[bix, biy, biz] != BlockType.Air)
+                    hitBlockSound.clip = itemSet.iSet[tc.blocks[bix, biy, biz].ToString()].hitSound;
                 breakingBlock.SetActive(true);
                 breakingBlock.transform.position = selectedBlock.transform.position;
                 breakingBlock.GetComponentInChildren<MeshRenderer>().material = bBlockMaterials[index];
@@ -266,17 +267,17 @@ public class TerrainModifier : MonoBehaviour
 
         if (curDurability <= 0)
         {   // 내구도가 0이하가 되면 블럭 채굴
-            if (tc.blocks[tBlockX, tBlockY, tBlockZ] != BlockType.Air && !blockSound.isPlaying)
+            if (tc.blocks[bix, biy, biz] != BlockType.Air && !blockSound.isPlaying)
             {
-                blockSound.clip = itemSet.iSet[tc.blocks[tBlockX, tBlockY, tBlockZ].ToString()].breakSound;
+                blockSound.clip = itemSet.iSet[tc.blocks[bix, biy, biz].ToString()].breakSound;
                 blockSound.transform.position = breakingBlock.transform.position;
                 blockSound.Play();
             }
             curDurability = durability;
-            GetItem(tc.blocks[tBlockX, tBlockY, tBlockZ]);
+            GetItem(tc.blocks[bix, biy, biz]);
             breakingBlock.SetActive(false);
 
-            tc.blocks[tBlockX, tBlockY, tBlockZ] = BlockType.Air;
+            tc.blocks[bix, biy, biz] = BlockType.Air;
             tc.BuildMesh();
         }
     }
@@ -284,22 +285,22 @@ public class TerrainModifier : MonoBehaviour
     // 단축 인벤의 선택슬롯에 있는 블럭 설치
     private void PlacingBlock()
     {
-        if (ps.standBlockX - ps.standChunkX * 16 != tBlockX ||
-            ps.standBlockZ - ps.standChunkZ * 16 != tBlockZ ||
-            ps.standBlockY != tBlockY && ps.standBlockY + 1 != tBlockY)
+        if (ps.standBlockX - ps.standChunkX * 16 != bix ||
+            ps.standBlockZ - ps.standChunkZ * 16 != biz ||
+            ps.standBlockY != biy && ps.standBlockY + 1 != biy)
         {
             blockSound.clip = hotInven_w.slots[curSlot].item.placeSound;
             blockSound.Play();
-            tc.blocks[tBlockX, tBlockY, tBlockZ] = hotInven_w.slots[curSlot].item.blockType;
+            tc.blocks[bix, biy, biz] = hotInven_w.slots[curSlot].item.blockType;
 
             if (--hotInven_w.slots[curSlot].itemCount == 0)
             {
                 hotInven_w.slots[curSlot].item = null;
             }
+
             hotInven_w.slots[curSlot].SetItemCountText();
 
             tc.BuildMesh();
-            ps.invenAvail = true;
         }
     }
 
@@ -322,18 +323,18 @@ public class TerrainModifier : MonoBehaviour
 
             tc = TerrainGenerator.buildedChunks[cp];
 
-            // 바라보고 있는 블록 좌표
-            tBlockX = Mathf.FloorToInt(targetPos.x) - chunkPosX * 16;
-            tBlockY = Mathf.FloorToInt(targetPos.y);
-            tBlockZ = Mathf.FloorToInt(targetPos.z) - chunkPosZ * 16;
+            //index of the target block
+            bix = Mathf.FloorToInt(targetPos.x) - chunkPosX * 16;
+            biy = Mathf.FloorToInt(targetPos.y);
+            biz = Mathf.FloorToInt(targetPos.z) - chunkPosZ * 16;
 
             selectedBlock.SetActive(true);
             selectedBlock.transform.position = new Vector3(
-                tBlockX + chunkPosX * 16, tBlockY, tBlockZ + chunkPosZ * 16);
+                bix + chunkPosX * 16, biy, biz + chunkPosZ * 16);
 
-            if (tBlockY >= TerrainChunk.chunkHeight || tBlockY < 0)
+            if (biy >= TerrainChunk.chunkHeight || biy < 0)
                 return false;
-            GetBlockDurability(tc.blocks[tBlockX, tBlockY, tBlockZ]);
+            GetBlockDurability(tc.blocks[bix, biy, biz]);
             return true;
         }
         else

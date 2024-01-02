@@ -33,9 +33,8 @@ public class TerrainChunk : MonoBehaviour
                     {
                         Vector3 blockPos = new Vector3(x, y, z);
                         int numFaces = 0;
-                        // 위 블록이 공기 블록인 경우 메쉬 생성
-                        if(y == chunkHeight - 1 || y < chunkHeight - 1 && 
-                            blocks[x, y + 1, z] == BlockType.Air)
+                        //no land above, build top face
+                        if(y == chunkHeight - 1 || y < chunkHeight - 1 && blocks[x, y + 1, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 1, 0));
                             verts.Add(blockPos + new Vector3(0, 1, 1));
@@ -46,7 +45,7 @@ public class TerrainChunk : MonoBehaviour
                             uvs.AddRange(Block.blocks[blocks[x, y, z]].topPos.GetUVs());
                         }
 
-                        // 아랫면
+                        //bottom
                         if(y == 0 || y > 0 && blocks[x, y - 1, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 0, 0));
@@ -58,7 +57,7 @@ public class TerrainChunk : MonoBehaviour
                             uvs.AddRange(Block.blocks[blocks[x, y, z]].bottomPos.GetUVs());
                         }
 
-                        // 앞면
+                        //front
                         if(z == 0 || z > 0 && blocks[x, y, z - 1] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 0, 0));
@@ -70,9 +69,8 @@ public class TerrainChunk : MonoBehaviour
                             uvs.AddRange(Block.blocks[blocks[x, y, z]].frontPos.GetUVs());
                         }
 
-                        // 오른쪽 면
-                        if(x == chunkWidth - 1 || x < chunkWidth - 1 && 
-                            blocks[x + 1, y, z] == BlockType.Air)
+                        //right
+                        if(x == chunkWidth - 1 || x < chunkWidth - 1 && blocks[x + 1, y, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(1, 0, 0));
                             verts.Add(blockPos + new Vector3(1, 1, 0));
@@ -83,9 +81,8 @@ public class TerrainChunk : MonoBehaviour
                             uvs.AddRange(Block.blocks[blocks[x, y, z]].sidePos.GetUVs());
                         }
 
-                        // 뒷면
-                        if(z == chunkWidth - 1 || z < chunkWidth - 1 && 
-                            blocks[x, y, z + 1] == BlockType.Air)
+                        //back
+                        if(z == chunkWidth - 1 || z < chunkWidth - 1 && blocks[x, y, z + 1] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(1, 0, 1));
                             verts.Add(blockPos + new Vector3(1, 1, 1));
@@ -96,7 +93,7 @@ public class TerrainChunk : MonoBehaviour
                             uvs.AddRange(Block.blocks[blocks[x, y, z]].frontPos.GetUVs());
                         }
 
-                        // 왼쪽 면
+                        //left
                         if(x == 0 || x > 0 && blocks[x - 1, y, z] == BlockType.Air)
                         {
                             verts.Add(blockPos + new Vector3(0, 0, 1));
@@ -107,6 +104,7 @@ public class TerrainChunk : MonoBehaviour
 
                             uvs.AddRange(Block.blocks[blocks[x, y, z]].sidePos.GetUVs());
                         }
+
 
                         int tl = verts.Count - 4 * numFaces;
                         for(int i = 0; i < numFaces; i++)

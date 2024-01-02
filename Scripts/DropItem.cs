@@ -12,8 +12,7 @@ public class DropItem : MonoBehaviour
     public int count;
     public Inventory hotInven;
     public Transform player;
-    private PlayerMove pm;
-    private PlayerStatus ps;
+    public PlayerMove pm;
 
     public float jump;
 
@@ -27,7 +26,6 @@ public class DropItem : MonoBehaviour
 
     float dis;
     float itemSpeed = 10f;
-    float remainTime = 10f;
 
     public AudioClip getItemSound;
 
@@ -40,21 +38,13 @@ public class DropItem : MonoBehaviour
         GetComponent<MeshRenderer>().material = matDictionary[matName];
         player = GameObject.Find("Player").transform;
         pm = player.GetComponent<PlayerMove>();
-        ps = player.GetComponent<PlayerStatus>();
         hotInven = pm.hotInven;
     }
 
     private void Update()
     {
-        remainTime -= Time.deltaTime;
-        if (remainTime <= 0)
-            Destroy(gameObject);
-        else
-        {
-            Floating();
-            if (ps.invenAvail)
-                CheckDistanc();
-        }
+        Floating();
+        CheckDistanc();
     }
 
     private void Floating() //떠있는거
@@ -79,13 +69,10 @@ public class DropItem : MonoBehaviour
     {
         if (collision.gameObject.name == "Player")
         {
+            pm.audioSource.clip = getItemSound;
+            pm.audioSource.Play();
             hotInven.AddItem(item, count);
-            if (ps.invenAvail)
-            {
-                pm.audioSource.clip = getItemSound;
-                pm.audioSource.Play();
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 }

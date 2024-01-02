@@ -43,7 +43,6 @@ public class TerrainGenerator : MonoBehaviour
             (player.position.z / 2 + seed) / terrainDetail)
             * terrainHeight) + 19;
         player.position = new Vector3(player.position.x, playerY, player.position.z);
-
         PlayerStatus ps = player.GetComponent<PlayerStatus>();
         ps.spawnPoint = player.position;
         buildedChunks = new Dictionary<ChunkPos, TerrainChunk>();
@@ -160,8 +159,7 @@ public class TerrainGenerator : MonoBehaviour
         }
         else
         {   // 积己等 利 绝绰 没农搁 货肺 积己
-            GameObject chunkObj = Instantiate(terrainChunk, 
-                new Vector3(xPos * 16, 0, zPos * 16), Quaternion.identity);
+            GameObject chunkObj = Instantiate(terrainChunk, new Vector3(xPos * 16, 0, zPos * 16), Quaternion.identity);
             chunkObj.transform.parent = GameObject.Find("Terrain").transform;
             chunk = chunkObj.GetComponent<TerrainChunk>();
             buildedChunks.Add(curChunk, chunk);
@@ -169,8 +167,7 @@ public class TerrainGenerator : MonoBehaviour
             for (int x = 0; x < cWidth; x++)
                 for (int z = 0; z < cWidth; z++)
                     for (int y = 0; y < cHeight; y++)
-                        chunk.blocks[x, y, z] = GetBlockType
-                            (xPos * 16 + x - 1, y, zPos * 16 + z - 1);
+                        chunk.blocks[x, y, z] = GetBlockType(xPos * 16 + x - 1, y, zPos * 16 + z - 1);
 
             // 唱公 积己
             BuildTrees(chunk.blocks);  
@@ -188,8 +185,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         BlockType bt;
 
-        int grassY = (int)(Mathf.PerlinNoise((x / 2 + seed) / terrainDetail, 
-            (z / 2 + seed) / terrainDetail) * terrainHeight) +16;
+        int grassY = (int)(Mathf.PerlinNoise((x / 2 + seed) / terrainDetail, (z / 2 + seed) / terrainDetail) * terrainHeight) +16;
         int soilRange = Random.Range(3, 5);
 
         if (y == 0)

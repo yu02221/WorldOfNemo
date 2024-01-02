@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
     public Slot[] slots;    // 인벤토리에 있는 슬롯 목록
     public Inventory nextInventory;     // 인벤토리가 가득 찼을 때 아이템을 넘겨 줄 인벤토리
-    public Text instantMsg;
-    public Animator instantMsgAnim;
-    public PlayerStatus ps;
 
     // 하이어라키 창에 올렸을 때 자동으로 실행
     private void OnValidate()
@@ -24,7 +20,6 @@ public class Inventory : MonoBehaviour
     /// <param name="count">추가할 아이템 수량</param>
     public void AddItem(Item _item, int count)
     {
-        ps.invenAvail = true;
         int addIdx = -1;    // 슬롯 목록 중 저장할 위치 인덱스
         // 저장할 위치 검색
         for (int i = 0; i < slots.Length; i++)
@@ -59,11 +54,7 @@ public class Inventory : MonoBehaviour
                 if (nextInventory != null)
                     nextInventory.AddItem(_item, count);
                 else
-                {
-                    ps.invenAvail = false;
-                    instantMsg.text = "모든 인벤토리가 가득 찼습니다.";
-                    instantMsgAnim.SetTrigger("start");
-                }
+                    print("모든 인벤토리가 가득 찼습니다.");
                 return;
             }
         }
